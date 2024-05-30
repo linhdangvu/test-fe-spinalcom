@@ -6,7 +6,14 @@ export default {
     title: String,
   },
   data() {
-    return {};
+    return {
+      search: "",
+    };
+  },
+  methods: {
+    handleSearch() {
+      this.$emit("getSearch", this.search);
+    },
   },
 };
 </script>
@@ -16,8 +23,14 @@ export default {
     <button class="btn-filter icon-default" type="submit">
       <i class="fa fa-filter"></i>
     </button>
-    <input type="text" :placeholder="title" name="search" />
-    <button class="btn-search icon-default" type="submit">
+    <input
+      type="text"
+      :placeholder="title"
+      name="search"
+      v-model="search"
+      @keydown.enter="handleSearch"
+    />
+    <button class="btn-search icon-default" type="submit" @click="handleSearch">
       <i class="fa fa-search"></i>
     </button>
   </div>
@@ -44,11 +57,16 @@ export default {
   border-radius: 30px;
   border: none;
   background-color: var(--gray-100);
-  color: var(--text-placeholder);
+  /* color: var(--text-placeholder); */
   font-weight: 700;
 }
 
+::placeholder {
+  color: var(--text-placeholder);
+}
+
 .search-bar .btn-search {
+  cursor: pointer;
   position: absolute;
   top: 6px;
   right: 8px;

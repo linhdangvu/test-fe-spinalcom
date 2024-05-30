@@ -7,16 +7,49 @@ export default {
   name: "EtagePage",
   components: { SearchBar, DividerLine, EtageList },
   props: {
-    etageData: {},
+    etageData: [],
+  },
+  data() {
+    return {
+      searchData: "",
+      loading: false,
+    };
+  },
+  methods: {
+    handleUpdate(e) {
+      this.$emit("updateCurrentEtage", e);
+    },
+    handleSearch(data) {
+      this.searchData = data;
+    },
+  },
+
+  computed: {
+    filteredEtageData() {
+      if (!this.searchData) {
+        return this.etageData;
+      }
+      const newData = this.etageData.filter((item) => {
+        return String(item.dynamicId).match(
+          new RegExp("^" + this.searchData, "i")
+        );
+      });
+      return newData;
+    },
   },
 };
 </script>
 
 <template>
   <div id="etage">
-    <SearchBar title="Référence de l'étage" />
+    <SearchBar title="Référence de l'étage" @getSearch="handleSearch" />
     <DividerLine />
-    <EtageList :etage-data="etageData" />
+    <!-- {{ filteredEtageData }} -->
+    <EtageList
+      v-if="filteredEtageData.length !== 0"
+      :etage-data="filteredEtageData"
+      @updateCurrentEtage="handleUpdate"
+    />
   </div>
 </template>
 

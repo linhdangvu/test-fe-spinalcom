@@ -1,6 +1,15 @@
+<script>
+export default {
+  name: "PieceCard",
+  props: {
+    totalPiece: Number,
+  },
+};
+</script>
+
 <template>
   <div id="piece-card">
-    <h1>57</h1>
+    <h1>{{ totalPiece }}</h1>
     <p class="description">Pièces</p>
   </div>
 </template>

@@ -16,7 +16,12 @@ export default {
 <template>
   <div id="batiment-list">
     <!-- {{ usineData }} -->
-    <div v-for="(u, id) in usineData" :key="id" class="batiment-card">
+    <div
+      v-for="(u, id) in usineData"
+      :key="id"
+      class="batiment-card"
+      @click="() => $emit('updateCurrentUsine', u)"
+    >
       <div class="batiment-image">
         <div class="image">{{ u.image }}</div>
       </div>
@@ -33,7 +38,7 @@ export default {
 
 <style>
 #batiment-list {
-  height: 75vh;
+  height: 73vh;
   background-color: var(--gray-100);
   margin: 10px;
   /* margin-bottom: 20px; */
@@ -48,6 +53,7 @@ export default {
   gap: 5px;
   border-radius: 5px;
   padding: 3px 6px;
+  cursor: pointer;
 }
 
 #batiment-list .batiment-image {

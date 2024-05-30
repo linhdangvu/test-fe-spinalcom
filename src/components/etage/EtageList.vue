@@ -1,45 +1,30 @@
 <script>
-import VueCircle from "vue2-circle-progress";
+import EtageArea from "./EtageArea.vue";
 
 export default {
   name: "EtageList",
-  components: { VueCircle },
+  components: { EtageArea },
   props: {
-    etageData: {},
-  },
-  data() {
-    return {
-      fill: { gradient: ["#e58e00"] },
-    };
-  },
-  mounted(props) {
-    console.log("go", props.etageData);
+    etageData: [],
   },
 };
 </script>
 
 <template>
-  <div id="etage-list">
-    <div v-for="(e, id) in etageData" :key="id" class="etage-card">
+  <div v-if="etageData.length !== 0" id="etage-list">
+    <div
+      v-for="(e, id) in etageData"
+      :key="id"
+      class="etage-card"
+      @click="() => $emit('updateCurrentEtage', e)"
+    >
       <div class="etage-title">
         <h2>{{ e.name }}</h2>
         <p>{{ e.type }}</p>
       </div>
+
       <div class="etage-progress">
-        <VueCircle
-          :progress="50"
-          :size="50"
-          :reverse="false"
-          line-cap="round"
-          :fill="fill"
-          empty-fill="rgba(0, 0, 0, .1)"
-          :animation-start-value="0.0"
-          :start-angle="0"
-          insert-mode="append"
-          :thickness="5"
-          :show-percent="true"
-        >
-        </VueCircle>
+        <EtageArea :dynamic-id="e.dynamicId" />
       </div>
     </div>
   </div>
@@ -47,7 +32,7 @@ export default {
 
 <style scoped>
 #etage-list {
-  height: 53vh;
+  height: 50vh;
   background-color: var(--gray-100);
   margin: 10px;
   /* margin-bottom: 20px; */
@@ -63,6 +48,7 @@ export default {
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 5px;
+  cursor: pointer;
 }
 
 #etage-list .etage-title {

@@ -8,17 +8,29 @@ import DividerLine from "../divider/DividerLine.vue";
 export default {
   name: "PiecePage",
   components: { UsineCard, PieceCard, PieceList, DividerLine, SearchBar },
+  props: {
+    pieceData: [],
+    currentEtage: {},
+  },
   data() {
-    return {
-      usineData: [
-        {
-          title: "Usine",
-          image: "",
-          reference: "1234",
-          description: "GEO",
-        },
-      ],
-    };
+    return { searchData: "" };
+  },
+  methods: {
+    handleSearch(data) {
+      this.searchData = data;
+    },
+  },
+  computed: {
+    filteredPieceData() {
+      if (!this.searchData) {
+        return this.pieceData;
+      }
+      return this.pieceData.filter((item) => {
+        return String(item.dynamicId).match(
+          new RegExp("^" + this.searchData, "i")
+        );
+      });
+    },
   },
 };
 </script>
@@ -26,12 +38,16 @@ export default {
 <template>
   <div id="piece">
     <div class="info">
-      <UsineCard class="info-1" /><PieceCard class="info-2" />
+      <UsineCard class="info-1" :current-data="currentEtage" />
+      <PieceCard class="info-2" :total-piece="pieceData.length" />
     </div>
     <div class="piece-content">
-      <SearchBar title="Référence de la pièce" />
+      <SearchBar title="Référence de la pièce" @getSearch="handleSearch" />
       <DividerLine />
-      <PieceList />
+      <PieceList
+        v-if="filteredPieceData.length !== 0"
+        :piece-data="filteredPieceData"
+      />
     </div>
   </div>
 </template>

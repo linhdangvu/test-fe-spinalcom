@@ -1,8 +1,22 @@
+<script>
+export default {
+  name: "UsineCard",
+  props: {
+    currentData: {},
+  },
+  data() {
+    return {};
+  },
+};
+</script>
+
 <template>
   <div id="card">
-    <h1>Usine</h1>
-    <p class="description">dfdsf</p>
-    <p class="footer"><span>DynamicId: </span><span>12323</span></p>
+    <h1>{{ currentData.name }}</h1>
+    <p class="description">{{ currentData.type }}</p>
+    <p class="footer">
+      <span>DynamicId: </span><span>{{ currentData.dynamicId }}</span>
+    </p>
   </div>
 </template>
 
