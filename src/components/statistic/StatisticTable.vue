@@ -1,23 +1,69 @@
 <script>
+import { tableData1 } from "@/data/table_data.js";
+
 export default {
   name: "StatisticTable",
   data() {
     return {
-      tableData: [
-        { id: 1, room: "aaa", floor: 2, co2: 12321, color: "lightgreen" },
-        { id: 2, room: "aaa", floor: 2, co2: 12321, color: "lightgreen" },
-        { id: 3, room: "aaa", floor: 2, co2: 12321, color: "lightgreen" },
-        { id: 4, room: "aaa", floor: 2, co2: 12321, color: "lightgreen" },
-        { id: 5, room: "aaa", floor: 2, co2: 12321, color: "lightgreen" },
-        { id: 6, room: "aaa", floor: 2, co2: 12321, color: "lightgreen" },
-      ],
+      tableData: tableData1,
       filterData: [
         { id: 1, status: "Good", color: "lightgreen" },
         { id: 2, status: "Moderate", color: "yellow" },
         { id: 3, status: "Unhealthy", color: "orange" },
         { id: 4, status: "Hazardous", color: "red" },
       ],
+      perPage: 5,
+      currentPage: 1,
+      currentPagination: 1,
+      listPagination: [],
+      posPagination: 0,
     };
+  },
+  mounted() {
+    this.getListPagination();
+  },
+  methods: {
+    toSmallerList(lp, size) {
+      const result = [];
+      for (let i = 0; i < lp; i += size) {
+        if (i + 1 > size) {
+          result.push([i]);
+        } else {
+          if (i + 2 > size) {
+            result.push([i, i + 1]);
+          } else {
+            result.push([i, i + 1, i + 2]);
+          }
+        }
+      }
+      return result;
+    },
+
+    getListPagination() {
+      let listSize = 0;
+      if (this.tableData.length !== 0) {
+        if (this.tableData.length % this.perPage === 0) {
+          listSize = Math.floor(this.tableData.length / this.perPage);
+        } else {
+          listSize = Math.floor(this.tableData.length / this.perPage) + 1;
+        }
+        this.listPagination = this.toSmallerList(listSize, 3);
+      } else return [];
+    },
+
+    handleCurrentPagination(item) {
+      this.currentPagination = item + 1;
+    },
+  },
+  computed: {
+    filteredData() {
+      if (this.currentPagination === 1) {
+        return this.tableData.slice(0, 5);
+      }
+      const pos = this.currentPagination * this.perPage;
+      console.log(pos);
+      return this.tableData.slice(pos - 5, pos);
+    },
   },
 };
 </script>
@@ -42,7 +88,7 @@ export default {
           <th>Co2 level</th>
         </thead>
         <tbody>
-          <tr v-for="t in tableData" :key="t.id">
+          <tr v-for="t in filteredData" :key="t.id">
             <td style="text-transform: uppercase; width: 60%">{{ t.room }}</td>
             <td style="width: 15%">{{ t.floor }}</td>
             <td style="display: flex; align-items: center; width: 25%">
@@ -53,6 +99,7 @@ export default {
                   backgroundColor: t.color,
                   marginRight: '5px',
                   borderRadius: '3px',
+                  minWidth: '7px',
                 }"
               ></div>
 
@@ -62,11 +109,31 @@ export default {
         </tbody>
       </table>
       <div class="pagination">
-        <button class="btn-chevron"><i class="fa fa-chevron-left"></i></button>
-        <button class="btn-number"><span>1</span></button>
-        <button class="btn-number"><span>1</span></button>
-        <button class="btn-number"><span>1</span></button>
-        <button class="btn-chevron"><i class="fa fa-chevron-right"></i></button>
+        <button
+          :class="posPagination <= 0 ? 'is-hidden' : 'is-show'"
+          class="btn-chevron"
+          @click="posPagination--"
+        >
+          <i class="fa fa-chevron-left"></i>
+        </button>
+        <button
+          class="btn-number"
+          v-for="(item, id) in listPagination[posPagination]"
+          :key="id"
+          :class="item + 1 === currentPagination && 'is-active'"
+          @click.prevent="handleCurrentPagination(item)"
+        >
+          <span>{{ item + 1 }}</span>
+        </button>
+        <button
+          :class="
+            posPagination >= listPagination.length - 1 ? 'is-hidden' : 'is-show'
+          "
+          class="btn-chevron"
+          @click="posPagination++"
+        >
+          <i class="fa fa-chevron-right"></i>
+        </button>
       </div>
     </div>
   </div>
@@ -111,6 +178,8 @@ export default {
 
 .room-table {
   margin-top: 20px;
+  height: 275px;
+  position: relative;
 }
 
 .room-table table {
@@ -136,6 +205,9 @@ export default {
   display: flex;
   justify-content: right;
   gap: 5px;
+  position: absolute;
+  right: 34px;
+  bottom: 10px;
 }
 
 .pagination .btn-chevron,
@@ -147,7 +219,8 @@ export default {
 }
 
 .pagination .btn-chevron:hover,
-.pagination .btn-number:hover {
+.pagination .btn-number:hover,
+.pagination .is-active {
   background-color: var(--gray-250);
   cursor: pointer;
 }
@@ -158,5 +231,13 @@ export default {
 
 .pagination .btn-number {
   padding: 2px 12px;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.is-show {
+  display: block;
 }
 </style>
