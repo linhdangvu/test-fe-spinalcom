@@ -23,7 +23,16 @@ export default {
           `https://api-developers.spinalcom.com/api/v1/room/${this.dynamicId}/control_endpoint_list`
         );
         // console.log(response.data);
-        this.status = response.data;
+
+        if (response.data.length === 0) {
+          this.status = "undefined";
+        } else {
+          const index = response.data[0].endpoints.find(
+            (item) => item.type === "Occupation"
+          );
+          this.status = String(index.currentValue);
+        }
+
         this.loading = false;
       } catch (error) {
         this.error = "Failed to load data";
@@ -36,8 +45,9 @@ export default {
 
 <template>
   <div v-if="!loading" class="piece-status">
-    <p class="is-occupe" v-if="status.length !== 0">Occupe</p>
-    <p class="not-occupe" v-else>Non Occupe</p>
+    <p class="is-occupe" v-if="this.status === `true`">Occupe</p>
+    <p class="not-occupe" v-else-if="this.status === `false`">Non Occupe</p>
+    <p class="undefined" v-else>Undefined</p>
   </div>
 </template>
 
@@ -52,7 +62,8 @@ export default {
 }
 
 .is-occupe,
-.not-occupe {
+.not-occupe,
+.undefined {
   color: white;
   text-transform: uppercase;
   font-weight: bolder;
@@ -67,5 +78,9 @@ export default {
 
 .not-occupe {
   background-color: var(--red-100);
+}
+
+.undefined {
+  background-color: var(--gray-300);
 }
 </style>
