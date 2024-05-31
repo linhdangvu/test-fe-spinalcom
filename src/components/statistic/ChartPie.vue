@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: "StatisticPage",
+  name: "ChartPie",
   props: {
     chartData: {},
   },

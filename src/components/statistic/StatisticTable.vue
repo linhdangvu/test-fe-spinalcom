@@ -23,6 +23,8 @@ export default {
     this.getListPagination();
   },
   methods: {
+    // convert big list to smaller
+    // Ex: big list = 4 => smaller [[1,2,3], [4]]
     toSmallerList(lp, size) {
       const result = [];
       for (let i = 0; i < lp; i += size) {
@@ -39,6 +41,7 @@ export default {
       return result;
     },
 
+    // check modulo for get pagination list
     getListPagination() {
       let listSize = 0;
       if (this.tableData.length !== 0) {
@@ -61,7 +64,6 @@ export default {
         return this.tableData.slice(0, 5);
       }
       const pos = this.currentPagination * this.perPage;
-      console.log(pos);
       return this.tableData.slice(pos - 5, pos);
     },
   },

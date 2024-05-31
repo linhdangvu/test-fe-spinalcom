@@ -4,9 +4,6 @@ export default {
   props: {
     currentData: {},
   },
-  data() {
-    return {};
-  },
 };
 </script>
 

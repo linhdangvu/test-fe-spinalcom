@@ -1,21 +1,14 @@
 <script>
 export default {
   name: "BatimentList",
-  //   components: { SearchBar, UsineList },
   props: {
     usineData: {},
-  },
-  data() {
-    return {
-      // usineData: props.usineData,
-    };
   },
 };
 </script>
 
 <template>
   <div id="batiment-list">
-    <!-- {{ usineData }} -->
     <div
       v-for="(u, id) in usineData"
       :key="id"
@@ -41,7 +34,6 @@ export default {
   height: 73vh;
   background-color: var(--gray-100);
   margin: 10px;
-  /* margin-bottom: 20px; */
   padding: 10px;
   overflow-y: scroll;
 }

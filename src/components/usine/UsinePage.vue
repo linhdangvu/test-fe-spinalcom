@@ -1,11 +1,11 @@
 <script>
+import axios from "axios";
 import SearchBar from "../search/SearchBar.vue";
 import BatimentList from "./BatimentList.vue";
 import UsineCard from "../card/UsineCard.vue";
 import DividerLine from "../divider/DividerLine.vue";
 import EtagePage from "../etage/EtagePage.vue";
 import PiecePage from "../piece/PiecePage.vue";
-import axios from "axios";
 
 export default {
   name: "UsinePage",
@@ -21,6 +21,8 @@ export default {
   data() {
     return {
       items: [],
+      etageList: [],
+      pieceList: [],
       error: null,
       searchData: "",
       currentUsine: {
@@ -38,14 +40,13 @@ export default {
         dynamicId: 0,
         type: "",
       },
-      etageList: [],
-      pieceList: [],
     };
   },
   mounted() {
     this.fetchData();
   },
   methods: {
+    // get data from api
     async fetchData() {
       try {
         const response = await axios.get(
@@ -66,21 +67,26 @@ export default {
         console.error(error);
       }
     },
+
     setCurrentUsine(data) {
       this.currentUsine.name = data.name;
       this.currentUsine.dynamicId = data.dynamicId;
       this.currentUsine.type = data.type;
     },
+
     setCurrentEtage(data) {
       this.currentEtage.name = data.name;
       this.currentEtage.dynamicId = data.dynamicId;
       this.currentEtage.type = data.type;
     },
+
     setCurrentPiece(data) {
       this.currentPiece.name = data.name;
       this.currentPiece.dynamicId = data.dynamicId;
       this.currentPiece.type = data.type;
     },
+
+    // find list Etage by dynamicId of Usine
     getEtageByUsine(dynamicId) {
       if (this.items.length !== 0) {
         const res = this.items.find((item) => item.dynamicId === dynamicId);
@@ -88,6 +94,8 @@ export default {
         return res.children;
       }
     },
+
+    // find list Piece by dynamicId of Etage
     getPieceByEtage(etageList, dynamicId) {
       if (etageList.length !== 0) {
         const res = etageList.find((item) => item.dynamicId === dynamicId);
@@ -107,6 +115,7 @@ export default {
       }
     },
 
+    // update data when click on etage
     handleUpdateEtage(data) {
       this.setCurrentEtage(data);
       this.pieceList = this.getPieceByEtage(this.etageList, data.dynamicId);

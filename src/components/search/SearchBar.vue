@@ -1,7 +1,6 @@
 <script>
 export default {
   name: "SearchBar",
-  //   components: { SearchBar, Divider, EtageList },
   props: {
     title: String,
   },

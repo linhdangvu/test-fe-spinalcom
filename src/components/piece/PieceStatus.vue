@@ -17,6 +17,7 @@ export default {
     this.fetchData();
   },
   methods: {
+    // get data from api
     async fetchData() {
       try {
         const response = await axios.get(

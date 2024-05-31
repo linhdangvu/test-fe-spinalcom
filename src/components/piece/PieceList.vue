@@ -7,9 +7,6 @@ export default {
   props: {
     pieceData: [],
   },
-  data() {
-    return {};
-  },
 };
 </script>
 
