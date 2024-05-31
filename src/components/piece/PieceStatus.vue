@@ -22,7 +22,7 @@ export default {
         const response = await axios.get(
           `https://api-developers.spinalcom.com/api/v1/room/${this.dynamicId}/control_endpoint_list`
         );
-        console.log(response.data);
+        // console.log(response.data);
         this.status = response.data;
         this.loading = false;
       } catch (error) {

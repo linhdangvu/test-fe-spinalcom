@@ -84,14 +84,14 @@ export default {
     getEtageByUsine(dynamicId) {
       if (this.items.length !== 0) {
         const res = this.items.find((item) => item.dynamicId === dynamicId);
-        console.log(res);
+        // console.log(res);
         return res.children;
       }
     },
     getPieceByEtage(etageList, dynamicId) {
       if (etageList.length !== 0) {
         const res = etageList.find((item) => item.dynamicId === dynamicId);
-        console.log(res);
+        // console.log(res);
         return res.children;
       }
     },
@@ -103,7 +103,7 @@ export default {
           this.etageList,
           this.etageList[0].dynamicId
         );
-        console.log(this.pieceList);
+        // console.log(this.pieceList);
       }
     },
 
