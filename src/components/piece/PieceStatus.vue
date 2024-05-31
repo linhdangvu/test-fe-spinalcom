@@ -24,10 +24,12 @@ export default {
           `https://api-developers.spinalcom.com/api/v1/room/${this.dynamicId}/control_endpoint_list`
         );
         // console.log(response.data);
+        // If no data => undefined
 
         if (response.data.length === 0) {
           this.status = "undefined";
         } else {
+          // if there are occupation => status = true / false
           const index = response.data[0].endpoints.find(
             (item) => item.type === "Occupation"
           );
